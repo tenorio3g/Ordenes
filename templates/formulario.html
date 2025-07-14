@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orden de Trabajo - Mantenimiento</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -21,6 +21,57 @@
 </head>
 <body class="container py-4">
   <h2 class="mb-4">Orden de Trabajo de Mantenimiento</h2>
-  <!-- Aquí iría todo el contenido del formulario completo -->
+
+  <form method="POST" action="/">
+    <div class="seccion">
+      <div class="titulo-seccion">Datos Generales</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Área de trabajo:</label>
+          <input name="area" type="text" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label>Trabajo requerido:</label>
+          <input name="trabajo" type="text" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label>Celda o equipo:</label>
+          <input name="celda" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <div class="titulo-seccion">Solicitante</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Requisitor:</label>
+          <input name="requisitor" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Planta:</label>
+          <input name="planta" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Supervisor:</label>
+          <input name="supervisor" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-4">
+          <label>Fecha de requisición:</label>
+          <input name="fecha_requisicion" type="date" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label># de orden:</label>
+          <input name="numero_orden" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success">Guardar Orden</button>
+    </div>
+  </form>
 </body>
 </html>
