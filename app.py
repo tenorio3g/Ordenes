@@ -1,49 +1,53 @@
-from flask import Flask, render_template, request, redirect, send_file
-import sqlite3, csv
+from flask import Flask, render_template_string, send_file
+from weasyprint import HTML
+from io import BytesIO
 
 app = Flask(__name__)
 
-def init_db():
-    conn = sqlite3.connect("base.db")
-    c = conn.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS ordenes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        area TEXT, trabajo TEXT, celda TEXT, requisitor TEXT, planta TEXT, supervisor TEXT,
-        fecha_requisicion TEXT, numero_orden TEXT
-    )""")
-    conn.commit()
-    conn.close()
-
-@app.route("/", methods=["GET", "POST"])
-def formulario():
-    if request.method == "POST":
-        datos = request.form
-        conn = sqlite3.connect("base.db")
-        c = conn.cursor()
-        c.execute("""INSERT INTO ordenes (area, trabajo, celda, requisitor, planta, supervisor,
-            fecha_requisicion, numero_orden) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            datos.get("area"), datos.get("trabajo"), datos.get("celda"),
-            datos.get("requisitor"), datos.get("planta"), datos.get("supervisor"),
-            datos.get("fecha_requisicion"), datos.get("numero_orden")
-        ))
-        conn.commit()
-        conn.close()
-        return redirect("/")
-    return render_template("formulario.html")
+# Simulamos una orden de ejemplo
+orden_ejemplo = {
+    "area": "SNACK",
+    "trabajo": "Reemplazar barras dañadas",
+    "celda": "Celda 1",
+    "requisitor": "Departamento Médico",
+    "planta": "Planta A",
+    "supervisor": "Celeste Tirado",
+    "fecha": "2025-06-10",
+    "numero": "62502",
+    "solicitante": "MTTO. DE PLANTA",
+    "checklist": [
+        "Delimitar el área de trabajo",
+        "Cubrir máquinas o material",
+        "Confirmar permisos",
+        "Inspeccionar herramientas",
+        "Usar EPP",
+        "Verificación de ausencia de energía"
+    ],
+    "material": "Cables, barras, sujetadores",
+    "observaciones": "Trabajo realizado correctamente, se reemplazaron 3 barras.",
+    "electroducto": "E-02",
+    "espacio": "4",
+    "tablero": "T-12",
+    "espacio_tab": "6",
+    "cable": "THHN 12AWG",
+    "canalizacion": "Conduit PVC",
+    "obs_electrico": "Todo instalado según norma.",
+    "fecha_inicio": "2025-06-10",
+    "hora_inicio": "08:00",
+    "fecha_fin": "2025-06-10",
+    "hora_fin": "10:30",
+    "realizado": "Técnico A"
+}
 
 @app.route("/exportar")
 def exportar():
-    conn = sqlite3.connect("base.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM ordenes")
-    filas = c.fetchall()
-    conn.close()
-    with open("ordenes_exportadas.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["ID", "Área", "Trabajo", "Celda", "Requisitor", "Planta", "Supervisor", "Fecha Req.", "N° Orden"])
-        writer.writerows(filas)
-    return send_file("ordenes_exportadas.csv", as_attachment=True)
+    with open("pdf_template.html", encoding="utf-8") as f:
+        template = f.read()
+    html = render_template_string(template, orden=orden_ejemplo)
+    pdf_io = BytesIO()
+    HTML(string=html).write_pdf(pdf_io)
+    pdf_io.seek(0)
+    return send_file(pdf_io, mimetype="application/pdf", as_attachment=True, download_name="orden_trabajo.pdf")
 
 if __name__ == "__main__":
     init_db()
