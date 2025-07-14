@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orden de Trabajo - Mantenimiento</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .seccion {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    .titulo-seccion {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body class="container py-4">
+  <h2 class="mb-4 text-center">🛠️ Orden de Trabajo de Mantenimiento</h2>
+
+  <form method="POST" action="/">
+    <div class="seccion">
+      <div class="titulo-seccion">Datos Generales</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Área de trabajo:</label>
+          <input name="area" type="text" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label>Trabajo requerido:</label>
+          <input name="trabajo" type="text" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label>Celda o equipo:</label>
+          <input name="celda" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <div class="titulo-seccion">Solicitante</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Requisitor:</label>
+          <input name="requisitor" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Planta:</label>
+          <input name="planta" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Supervisor:</label>
+          <input name="supervisor" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-4">
+          <label>Fecha de requisición:</label>
+          <input name="fecha_requisicion" type="date" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label># de orden:</label>
+          <input name="numero_orden" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <div class="titulo-seccion">Check List de Seguridad</div>
+      <div class="form-check"><input class="form-check-input" name="check_delimitar" type="checkbox"> Delimitar el área de trabajo</div>
+      <div class="form-check"><input class="form-check-input" name="check_cubrir" type="checkbox"> Cubrir con plástico máquinas o equipos</div>
+      <div class="form-check"><input class="form-check-input" name="check_permisos" type="checkbox"> Confirmar permisos antes de iniciar</div>
+      <div class="form-check"><input class="form-check-input" name="check_epp" type="checkbox"> Usar EPP (Equipo de Protección Personal)</div>
+      <div class="form-check"><input class="form-check-input" name="check_energia" type="checkbox"> Verificación de ausencia de energía</div>
+    </div>
+
+    <div class="seccion">
+      <div class="titulo-seccion">Materiales y Actividades</div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Material utilizado:</label>
+          <textarea name="materiales" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label>Observaciones del trabajo realizado:</label>
+          <textarea name="observaciones_trabajo" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <div class="titulo-seccion">Fechas y Responsable</div>
+      <div class="row">
+        <div class="col-md-3">
+          <label>Fecha de inicio:</label>
+          <input name="fecha_inicio" type="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>Hora de inicio:</label>
+          <input name="hora_inicio" type="time" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>Fecha de terminación:</label>
+          <input name="fecha_termino" type="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>Hora de terminación:</label>
+          <input name="hora_termino" type="time" class="form-control">
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-6">
+          <label>Realizado por:</label>
+          <input name="realizado_por" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion">
+      <div class="titulo-seccion">Instalaciones Eléctricas</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Electroducto:</label>
+          <input name="electroducto" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Espacio del Electroducto:</label>
+          <input name="espacio_electroducto" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Número de Tablero:</label>
+          <input name="numero_tablero" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-4">
+          <label>Espacio utilizado del Tablero:</label>
+          <input name="espacio_tablero" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Cable utilizado:</label>
+          <input name="cable_utilizado" type="text" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Canalización utilizada:</label>
+          <input name="canalizacion" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <label>Observaciones del circuito eléctrico:</label>
+          <textarea name="observaciones_electricas" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary btn-lg">Guardar Orden</button>
+    </div>
+  </form>
+</body>
+</html>
