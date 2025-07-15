@@ -11,7 +11,7 @@ def index():
 
 @app.route("/pdf")
 def generar_pdf():
-    html = render_template("template_pdf.html")
+    html = render_template("pdf_template.html")
     pdf_io = BytesIO()
     HTML(string=html).write_pdf(pdf_io)
     pdf_io.seek(0)
