@@ -2,22 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Orden de Trabajo PDF</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    h2 { text-align: center; }
-    table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-    td { padding: 10px; border: 1px solid #ccc; }
-  </style>
+  <title>PDF de Orden</title>
 </head>
 <body>
-  <h2>Orden de Trabajo</h2>
-  <table>
-    <tr><td><strong>Área de trabajo:</strong> {{ orden.area }}</td></tr>
-    <tr><td><strong>Trabajo requerido:</strong> {{ orden.trabajo }}</td></tr>
-    <tr><td><strong>Equipo:</strong> {{ orden.equipo }}</td></tr>
-    <tr><td><strong>Fecha:</strong> {{ orden.fecha }}</td></tr>
-    <tr><td><strong>Supervisor:</strong> {{ orden.supervisor }}</td></tr>
-  </table>
+  <h1>Orden Generada</h1>
+  <p>Dato capturado: {{ dato }}</p>
 </body>
 </html>
