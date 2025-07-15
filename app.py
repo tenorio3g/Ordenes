@@ -4,7 +4,7 @@ from io import BytesIO
 
 app = Flask(__name__)
 
-# Esta es una orden de ejemplo. Puede remplazarse más adelante por datos dinámicos.
+# Orden de trabajo simulada (puede reemplazarse por datos reales después)
 orden_ejemplo = {
     "area": "SNACK",
     "trabajo": "Reemplazar barras dañadas",
@@ -42,20 +42,20 @@ orden_ejemplo = {
 @app.route("/")
 def index():
     return """
-    <h2>Exportar orden de trabajo</h2>
-    <a href="/exportar" class="btn btn-primary">Descargar PDF</a>
+    <h2>Exportar Orden de Trabajo</h2>
+    <a href="/exportar" class="btn btn-success">📄 Descargar PDF</a>
     """
 
 @app.route("/exportar")
 def exportar():
-    # Cargar la plantilla HTML
+    # Leer plantilla HTML
     with open("pdf_template.html", encoding="utf-8") as f:
         template = f.read()
 
-    # Renderizar la plantilla con los datos
+    # Renderizar HTML con los datos de la orden
     html = render_template_string(template, orden=orden_ejemplo)
 
-    # Convertir HTML a PDF
+    # Convertir a PDF
     pdf_io = BytesIO()
     HTML(string=html).write_pdf(pdf_io)
     pdf_io.seek(0)
