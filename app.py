@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, send_file
 from weasyprint import HTML
 from io import BytesIO
@@ -17,4 +18,5 @@ def generar_pdf():
     return send_file(pdf_io, mimetype="application/pdf", as_attachment=True, download_name="orden_simple.pdf")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))  # Render asigna el puerto automáticamente
+    app.run(host="0.0.0.0", port=port)
