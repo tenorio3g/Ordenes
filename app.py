@@ -1,61 +1,36 @@
-from flask import Flask, render_template_string, send_file
+from flask import Flask, send_file
 from weasyprint import HTML
 from io import BytesIO
 
 app = Flask(__name__)
 
-# Orden de trabajo simulada (puede reemplazarse por datos reales después)
-orden_ejemplo = {
-    "area": "SNACK",
-    "trabajo": "Reemplazar barras dañadas",
-    "celda": "Celda 1",
-    "requisitor": "Departamento Médico",
-    "planta": "Planta A",
-    "supervisor": "Celeste Tirado",
-    "fecha": "2025-06-10",
-    "numero": "62502",
-    "solicitante": "MTTO. DE PLANTA",
-    "checklist": [
-        "Delimitar el área de trabajo",
-        "Cubrir máquinas o material",
-        "Confirmar permisos",
-        "Inspeccionar herramientas",
-        "Usar EPP",
-        "Verificación de ausencia de energía"
-    ],
-    "material": "Cables, barras, sujetadores",
-    "observaciones": "Trabajo realizado correctamente, se reemplazaron 3 barras.",
-    "electroducto": "E-02",
-    "espacio": "4",
-    "tablero": "T-12",
-    "espacio_tab": "6",
-    "cable": "THHN 12AWG",
-    "canalizacion": "Conduit PVC",
-    "obs_electrico": "Todo instalado según norma.",
-    "fecha_inicio": "2025-06-10",
-    "hora_inicio": "08:00",
-    "fecha_fin": "2025-06-10",
-    "hora_fin": "10:30",
-    "realizado": "Técnico A"
-}
-
 @app.route("/")
 def index():
-    return """
-    <h2>Exportar Orden de Trabajo</h2>
-    <a href="/exportar" class="btn btn-success">📄 Descargar PDF</a>
+    return '''
+    <html>
+      <head><title>Generador de PDF</title></head>
+      <body style="font-family:Arial; text-align:center; margin-top:50px;">
+        <h1>Exportar Orden de Trabajo</h1>
+        <a href="/pdf" style="padding:10px 20px; background-color:green; color:white; text-decoration:none;">Exportar a PDF</a>
+      </body>
+    </html>
+    '''
+
+@app.route("/pdf")
+def generar_pdf():
+    html = """
+    <html>
+      <head><meta charset='utf-8'></head>
+      <body>
+        <h1 style="text-align:center;">Orden de Trabajo</h1>
+        <p>Esta es una prueba simple para exportar un PDF desde Flask y WeasyPrint.</p>
+        <p><b>Área:</b> Empaque</p>
+        <p><b>Trabajo:</b> Revisión de ductos</p>
+        <p><b>Supervisor:</b> Celeste Tirado</p>
+      </body>
+    </html>
     """
 
-@app.route("/exportar")
-def exportar():
-    # Leer plantilla HTML
-    with open("pdf_template.html", encoding="utf-8") as f:
-        template = f.read()
-
-    # Renderizar HTML con los datos de la orden
-    html = render_template_string(template, orden=orden_ejemplo)
-
-    # Convertir a PDF
     pdf_io = BytesIO()
     HTML(string=html).write_pdf(pdf_io)
     pdf_io.seek(0)
@@ -64,7 +39,7 @@ def exportar():
         pdf_io,
         mimetype="application/pdf",
         as_attachment=True,
-        download_name="orden_trabajo.pdf"
+        download_name="orden_simple.pdf"
     )
 
 if __name__ == "__main__":
