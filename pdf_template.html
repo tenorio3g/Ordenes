@@ -33,22 +33,38 @@
   </style>
 </head>
 <body>
-  <div class="titulo">ALCOM ELECTRONICOS DE MEXICO S.A. DE C.V.<br>ORDEN DE TRABAJO DE MANTENIMIENTO</div>
+  <div class="titulo">
+    ALCOM ELECTRÓNICOS DE MÉXICO S.A. DE C.V.<br>
+    ORDEN DE TRABAJO DE MANTENIMIENTO
+  </div>
 
   <table>
-    <tr><td><strong>Área de trabajo:</strong> {{ orden.area }}</td><td><strong>Trabajo requerido:</strong> {{ orden.trabajo }}</td></tr>
-    <tr><td colspan="2"><strong>Celda o equipo:</strong> {{ orden.celda }}</td></tr>
+    <tr>
+      <td><strong>Área de trabajo:</strong> {{ orden.area }}</td>
+      <td><strong>Trabajo requerido:</strong> {{ orden.trabajo }}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Celda o equipo:</strong> {{ orden.celda }}</td>
+    </tr>
   </table>
 
   <table>
-    <tr><td><strong>Requisitor:</strong> {{ orden.requisitor }}</td><td><strong>Planta:</strong> {{ orden.planta }}</td><td><strong>Supervisor:</strong> {{ orden.supervisor }}</td></tr>
-    <tr><td><strong>Fecha de requisición:</strong> {{ orden.fecha }}</td><td><strong># de orden:</strong> {{ orden.numero }}</td><td><strong>Solicitó término:</strong> {{ orden.solicitante }}</td></tr>
+    <tr>
+      <td><strong>Requisitor:</strong> {{ orden.requisitor }}</td>
+      <td><strong>Planta:</strong> {{ orden.planta }}</td>
+      <td><strong>Supervisor:</strong> {{ orden.supervisor }}</td>
+    </tr>
+    <tr>
+      <td><strong>Fecha de requisición:</strong> {{ orden.fecha }}</td>
+      <td><strong># de orden:</strong> {{ orden.numero }}</td>
+      <td><strong>Solicitó término:</strong> {{ orden.solicitante }}</td>
+    </tr>
   </table>
 
-  <div class="seccion">Obligaciones antes de realizar el trabajo</div>
+  <div class="seccion">Check List de Seguridad</div>
   <ul>
-    {% for chk in orden.checklist %}
-      <li>{{ chk }}</li>
+    {% for item in orden.checklist %}
+      <li>{{ item }}</li>
     {% endfor %}
   </ul>
 
@@ -58,17 +74,36 @@
   <div class="seccion">Observaciones del trabajo realizado</div>
   <p>{{ orden.observaciones }}</p>
 
-  <div class="seccion">Datos eléctricos</div>
+  <div class="seccion">Instalaciones Eléctricas</div>
   <table>
-    <tr><td>Electroducto: {{ orden.electroducto }}</td><td>Espacio: {{ orden.espacio }}</td><td>Tablero: {{ orden.tablero }}</td></tr>
-    <tr><td>Espacio utilizado: {{ orden.espacio_tab }}</td><td>Cable: {{ orden.cable }}</td><td>Canalización: {{ orden.canalizacion }}</td></tr>
-    <tr><td colspan="3">Observaciones: {{ orden.obs_electrico }}</td></tr>
+    <tr>
+      <td><strong>Electroducto:</strong> {{ orden.electroducto }}</td>
+      <td><strong>Espacio:</strong> {{ orden.espacio }}</td>
+      <td><strong>Tablero:</strong> {{ orden.tablero }}</td>
+    </tr>
+    <tr>
+      <td><strong>Espacio del Tablero:</strong> {{ orden.espacio_tab }}</td>
+      <td><strong>Cable utilizado:</strong> {{ orden.cable }}</td>
+      <td><strong>Canalización:</strong> {{ orden.canalizacion }}</td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong>Observaciones del circuito eléctrico:</strong><br>{{ orden.obs_electrico }}</td>
+    </tr>
   </table>
 
-  <div class="seccion">Fechas y firma</div>
+  <div class="seccion">Fechas y Responsable</div>
   <table>
-    <tr><td>Inicio: {{ orden.fecha_inicio }} {{ orden.hora_inicio }}</td><td>Fin: {{ orden.fecha_fin }} {{ orden.hora_fin }}</td></tr>
-    <tr><td colspan="2">Realizó: {{ orden.realizado }}</td></tr>
+    <tr>
+      <td><strong>Fecha de inicio:</strong> {{ orden.fecha_inicio }}</td>
+      <td><strong>Hora de inicio:</strong> {{ orden.hora_inicio }}</td>
+    </tr>
+    <tr>
+      <td><strong>Fecha de terminación:</strong> {{ orden.fecha_fin }}</td>
+      <td><strong>Hora de terminación:</strong> {{ orden.hora_fin }}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Realizado por:</strong> {{ orden.realizado }}</td>
+    </tr>
   </table>
 </body>
 </html>
