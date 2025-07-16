@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, make_response
-import pdfkit  # Necesitas wkhtmltopdf
-
+import pdfkit
 import os
 
 app = Flask(__name__)
@@ -12,7 +11,7 @@ def formulario():
 @app.route('/guardar', methods=['POST'])
 def guardar():
     dato = request.form['dato']
-    return f'Dato \"{dato}\" guardado correctamente.'
+    return f'Dato "{dato}" guardado correctamente.'
 
 @app.route('/exportar_pdf', methods=['POST'])
 def exportar_pdf():

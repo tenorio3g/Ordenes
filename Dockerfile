@@ -1,4 +1,3 @@
-# Usa una imagen oficial de Python con wkhtmltopdf instalado
 FROM python:3.11-slim
 
 RUN apt-get update && \
