@@ -1,2 +1,2 @@
-Flask
-pdfkit
+Flask==3.0.0
+pdfkit==1.0.0

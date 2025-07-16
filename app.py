@@ -1,10 +1,10 @@
+
 from flask import Flask, render_template, request, make_response
 import pdfkit
 import os
 
 app = Flask(__name__)
 
-# LISTA FIJA DEL CHECKLIST
 CHECKLIST_ITEMS = [
     "Delimitar el área de Trabajo",
     "Cubrir con plástico, máquinas o material de producción",
@@ -25,7 +25,6 @@ def formulario():
 
 @app.route('/exportar_pdf', methods=['POST'])
 def exportar_pdf():
-    # Capturar todos los campos del formulario
     orden = {
         'area': request.form.get('area'),
         'trabajo': request.form.get('trabajo'),
@@ -52,29 +51,22 @@ def exportar_pdf():
         'check': request.form.getlist('check[]')
     }
 
-    # Renderizar plantilla con datos y checklist completo
     rendered = render_template('pdf_template.html', orden=orden, checklist=CHECKLIST_ITEMS)
 
-    # Generar PDF con pdfkit
+    options = {
+        'page-width': '11in',
+        'page-height': '8.5in',
+        'orientation': 'Landscape',
+        'margin-top': '0.5in',
+        'margin-right': '0.5in',
+        'margin-bottom': '0.5in',
+        'margin-left': '0.5in',
+        'encoding': 'UTF-8',
+        'no-outline': None
+    }
 
-options = {
-    'page-width': '11in',
-    'page-height': '8.5in',
-    'orientation': 'Landscape',
-    'margin-top': '0.5in',
-    'margin-right': '0.5in',
-    'margin-bottom': '0.5in',
-    'margin-left': '0.5in',
-    'encoding': 'UTF-8',
-    'no-outline': None
-}
+    pdf = pdfkit.from_string(rendered, False, options=options)
 
-pdf = pdfkit.from_string(rendered, False, options=options)
-
-
-    
-
-    # Preparar respuesta para descarga
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=orden_trabajo.pdf'
