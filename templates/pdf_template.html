@@ -2,10 +2,155 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>PDF de Orden</title>
+  <title>Orden de Trabajo de Mantenimiento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      margin: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      border: 1px solid #000;
+      padding: 4px;
+      vertical-align: top;
+    }
+
+    .no-border {
+      border: none;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .checkbox {
+      font-family: DejaVu Sans, sans-serif;
+    }
+
+    .section-title {
+      font-weight: bold;
+      background: #eee;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
-  <h1>Orden Generada</h1>
-  <p>Dato capturado: {{ dato }}</p>
+
+  <h3 class="center">ALCOM ELECTRONICOS DE MEXICO S.A. DE C.V.<br>ORDEN DE TRABAJO DE MANTENIMIENTO</h3>
+
+  <table>
+    <tr>
+      <td><strong>ÁREA DE TRABAJO:</strong> {{ orden.area }}</td>
+      <td><strong>TRABAJO REQUERIDO:</strong> {{ orden.trabajo }}</td>
+    </tr>
+    <tr>
+      <td><strong>CELDA O EQUIPO:</strong> {{ orden.celda }}</td>
+      <td>
+        <strong>REQUISITOR:</strong> {{ orden.requisitor }}<br>
+        <strong>PLANTA:</strong> {{ orden.planta }}<br>
+        <strong>SUPERVISOR:</strong> {{ orden.supervisor }}<br>
+        <strong>Fecha de requisición:</strong> {{ orden.fecha_requisicion }}<br>
+        <strong># de Orden:</strong> {{ orden.orden }}
+      </td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title" colspan="2">NOTAS:</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Antes de entregar la orden de trabajo a mantenimiento deberán primero acudir al departamento de Seguridad y Medio Ambiente para su autorización.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>DEPTO DE EHS:</strong> SI ( ) NO ( )</td>
+      <td><strong>FIRMA DE EHS:</strong> ________________________</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title" colspan="3">OBLIGACIONES ANTES DE REALIZAR EL TRABAJO</td>
+    </tr>
+    {% for item in checklist %}
+    <tr>
+      <td style="width: 5%;">{% if item in orden.check %}✓{% else %} {% endif %}</td>
+      <td style="width: 95%;" colspan="2">{{ item }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td><strong>FECHA DE INICIO:</strong> {{ orden.fecha_inicio }}</td>
+      <td><strong>HORA DE INICIO:</strong> {{ orden.hora_inicio }}</td>
+      <td><strong>FECHA DE TERMINACIÓN:</strong> {{ orden.fecha_fin }}</td>
+      <td><strong>HORA DE TERMINACIÓN:</strong> {{ orden.hora_fin }}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>REALIZADO POR:</strong> {{ orden.realizado_por }}</td>
+      <td colspan="2"><strong>APROBADO POR:</strong> ________________________</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title">MATERIAL UTILIZADO:</td>
+    </tr>
+    <tr>
+      <td>{{ orden.material }}</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title">OBSERVACIONES DE TRABAJO REALIZADO</td>
+    </tr>
+    <tr>
+      <td>{{ orden.observaciones }}</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title" colspan="2">INSTALACIONES ELÉCTRICAS</td>
+    </tr>
+    <tr>
+      <td><strong>Electroducto:</strong> {{ orden.electroducto }}</td>
+      <td><strong>Espacio Electroducto:</strong> {{ orden.espacio_electroducto }}</td>
+    </tr>
+    <tr>
+      <td><strong>Número de Tablero:</strong> {{ orden.num_tablero }}</td>
+      <td><strong>Espacio del Tablero:</strong> {{ orden.espacio_tablero }}</td>
+    </tr>
+    <tr>
+      <td><strong>Cable Utilizado:</strong> {{ orden.cable }}</td>
+      <td><strong>Canalización Utilizada:</strong> {{ orden.canalizacion }}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Observaciones Eléctricas:</strong> {{ orden.obs_electrica }}</td>
+    </tr>
+  </table>
+
 </body>
 </html>
