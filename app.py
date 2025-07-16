@@ -57,18 +57,20 @@ def exportar_pdf():
 
     # Generar PDF con pdfkit
 
-    options = {
+options = {
     'page-width': '11in',
     'page-height': '8.5in',
+    'orientation': 'Landscape',
     'margin-top': '0.5in',
     'margin-right': '0.5in',
     'margin-bottom': '0.5in',
     'margin-left': '0.5in',
     'encoding': 'UTF-8',
-    'no-outline': None"
-    }
+    'no-outline': None
+}
 
-    pdf = pdfkit.from_string(rendered, False, options=options)
+pdf = pdfkit.from_string(rendered, False, options=options)
+
 
     
 
