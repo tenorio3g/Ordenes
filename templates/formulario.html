@@ -3,32 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title>Formulario de Orden</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container py-5">
-  <h2>Generar Orden en PDF</h2>
-  <form action="/pdf" method="post" class="mt-4">
-    <div class="mb-3">
-      <label>Área de trabajo:</label>
-      <input type="text" name="area" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Trabajo requerido:</label>
-      <input type="text" name="trabajo" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Equipo:</label>
-      <input type="text" name="equipo" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label>Fecha:</label>
-      <input type="date" name="fecha" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Supervisor:</label>
-      <input type="text" name="supervisor" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">Exportar a PDF</button>
+<body>
+  <h1>Captura de Orden</h1>
+  <form action="/guardar" method="POST">
+    <label for="dato">Dato:</label>
+    <input type="text" id="dato" name="dato" required><br><br>
+
+    <button type="submit">Guardar</button>
   </form>
+
+  <form action="/exportar_pdf" method="POST">
+    <input type="hidden" id="dato_hidden" name="dato">
+    <button type="submit" onclick="copiarDato()">Exportar PDF</button>
+  </form>
+
+  <script>
+    function copiarDato() {
+      var dato = document.getElementById('dato').value;
+      document.getElementById('dato_hidden').value = dato;
+    }
+  </script>
 </body>
 </html>
