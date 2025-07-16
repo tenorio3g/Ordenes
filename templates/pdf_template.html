@@ -1,160 +1,99 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Orden de Trabajo de Mantenimiento</title>
-  <style>
-      @page {
-    size: 11in 8.5in;
-  }
+from flask import Flask, render_template, request, make_response
+import pdfkit
+from PyPDF2 import PdfReader, PdfWriter
+import os
 
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      margin: 20px;
+app = Flask(__name__)
+
+CHECKLIST_ITEMS = [
+    "Delimitar el área de Trabajo",
+    "Cubrir con plástico, máquinas o material de producción",
+    "Confirmar con el permiso de trabajo antes de iniciar actividades",
+    "Inspeccionar la herramienta y equipo a utilizar que se encuentren en buenas condiciones",
+    "Hacer uso obligatorio del Equipo de Seguridad Personal EPP",
+    "Identificar Alimentación Eléctrica para Candadean en caso de ser necesario",
+    "Comprobar 100% la Ausencia de Energía con Amperímetro en todos los puntos",
+    "Puntos de alimentación energías acumuladas, entradas, salidas y retornos",
+    "Realizar todas las maniobras en base a seguridad",
+    "Limpiar el área después de realizado el trabajo",
+    "Reportar condiciones del área y equipos en cuanto a la conclusión del trabajo realizado"
+]
+
+@app.route('/')
+def formulario():
+    return render_template('formulario.html')
+
+@app.route('/exportar_pdf', methods=['POST'])
+def exportar_pdf():
+    orden = {
+        'area': request.form.get('area'),
+        'trabajo': request.form.get('trabajo'),
+        'celda': request.form.get('celda'),
+        'requisitor': request.form.get('requisitor'),
+        'planta': request.form.get('planta'),
+        'supervisor': request.form.get('supervisor'),
+        'fecha_requisicion': request.form.get('fecha_requisicion'),
+        'orden': request.form.get('orden'),
+        'fecha_inicio': request.form.get('fecha_inicio'),
+        'hora_inicio': request.form.get('hora_inicio'),
+        'fecha_fin': request.form.get('fecha_fin'),
+        'hora_fin': request.form.get('hora_fin'),
+        'realizado_por': request.form.get('realizado_por'),
+        'material': request.form.get('material'),
+        'observaciones': request.form.get('observaciones'),
+        'electroducto': request.form.get('electroducto'),
+        'espacio_electroducto': request.form.get('espacio_electroducto'),
+        'num_tablero': request.form.get('num_tablero'),
+        'espacio_tablero': request.form.get('espacio_tablero'),
+        'cable': request.form.get('cable'),
+        'canalizacion': request.form.get('canalizacion'),
+        'obs_electrica': request.form.get('obs_electrica'),
+        'check': request.form.getlist('check[]')
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    rendered = render_template('pdf_template.html', orden=orden, checklist=CHECKLIST_ITEMS)
+
+    options = {
+        'page-width': '11in',
+        'page-height': '8.5in',
+        'margin-top': '0.5in',
+        'margin-right': '0.5in',
+        'margin-bottom': '0.5in',
+        'margin-left': '0.5in',
+        'encoding': 'UTF-8',
+        'no-outline': None
     }
 
-    td, th {
-      border: 1px solid #000;
-      padding: 4px;
-      vertical-align: top;
-    }
+    # 1️⃣ Genera PDF temporal vertical
+    temp_pdf = "temp_orden.pdf"
+    pdfkit.from_string(rendered, temp_pdf, options=options)
 
-    .no-border {
-      border: none;
-    }
+    # 2️⃣ Rota el PDF con PyPDF2
+    rotated_pdf = "orden_trabajo_rotated.pdf"
+    reader = PdfReader(temp_pdf)
+    writer = PdfWriter()
 
-    .center {
-      text-align: center;
-    }
+    for page in reader.pages:
+        page.rotate(90)
+        writer.add_page(page)
 
-    .checkbox {
-      font-family: DejaVu Sans, sans-serif;
-    }
+    with open(rotated_pdf, "wb") as f_out:
+        writer.write(f_out)
 
-    .section-title {
-      font-weight: bold;
-      background: #eee;
-      text-align: left;
-    }
-  </style>
-</head>
-<body>
+    # 3️⃣ Devuelve PDF girado
+    with open(rotated_pdf, "rb") as f:
+        pdf_data = f.read()
 
-  <h3 class="center">ALCOM ELECTRONICOS DE MEXICO S.A. DE C.V.<br>ORDEN DE TRABAJO DE MANTENIMIENTO</h3>
+    response = make_response(pdf_data)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=orden_trabajo.pdf'
 
-  <table>
-    <tr>
-      <td><strong>ÁREA DE TRABAJO:</strong> {{ orden.area }}</td>
-      <td><strong>TRABAJO REQUERIDO:</strong> {{ orden.trabajo }}</td>
-    </tr>
-    <tr>
-      <td><strong>CELDA O EQUIPO:</strong> {{ orden.celda }}</td>
-      <td>
-        <strong>REQUISITOR:</strong> {{ orden.requisitor }}<br>
-        <strong>PLANTA:</strong> {{ orden.planta }}<br>
-        <strong>SUPERVISOR:</strong> {{ orden.supervisor }}<br>
-        <strong>Fecha de requisición:</strong> {{ orden.fecha_requisicion }}<br>
-        <strong># de Orden:</strong> {{ orden.orden }}
-      </td>
-    </tr>
-  </table>
+    # Limpieza opcional
+    os.remove(temp_pdf)
+    os.remove(rotated_pdf)
 
-  <br>
+    return response
 
-  <table>
-    <tr>
-      <td class="section-title" colspan="2">NOTAS:</td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        Antes de entregar la orden de trabajo a mantenimiento deberán primero acudir al departamento de Seguridad y Medio Ambiente para su autorización.
-      </td>
-    </tr>
-    <tr>
-      <td><strong>DEPTO DE EHS:</strong> SI ( ) NO ( )</td>
-      <td><strong>FIRMA DE EHS:</strong> ________________________</td>
-    </tr>
-  </table>
-
-  <br>
-
-  <table>
-    <tr>
-      <td class="section-title" colspan="3">OBLIGACIONES ANTES DE REALIZAR EL TRABAJO</td>
-    </tr>
-    {% for item in checklist %}
-    <tr>
-      <td style="width: 5%;">{% if item in orden.check %}✓{% else %} {% endif %}</td>
-      <td style="width: 95%;" colspan="2">{{ item }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-
-  <br>
-
-  <table>
-    <tr>
-      <td><strong>FECHA DE INICIO:</strong> {{ orden.fecha_inicio }}</td>
-      <td><strong>HORA DE INICIO:</strong> {{ orden.hora_inicio }}</td>
-      <td><strong>FECHA DE TERMINACIÓN:</strong> {{ orden.fecha_fin }}</td>
-      <td><strong>HORA DE TERMINACIÓN:</strong> {{ orden.hora_fin }}</td>
-    </tr>
-    <tr>
-      <td colspan="2"><strong>REALIZADO POR:</strong> {{ orden.realizado_por }}</td>
-      <td colspan="2"><strong>APROBADO POR:</strong> ________________________</td>
-    </tr>
-  </table>
-
-  <br>
-
-  <table>
-    <tr>
-      <td class="section-title">MATERIAL UTILIZADO:</td>
-    </tr>
-    <tr>
-      <td>{{ orden.material }}</td>
-    </tr>
-  </table>
-
-  <br>
-
-  <table>
-    <tr>
-      <td class="section-title">OBSERVACIONES DE TRABAJO REALIZADO</td>
-    </tr>
-    <tr>
-      <td>{{ orden.observaciones }}</td>
-    </tr>
-  </table>
-
-  <br>
-
-  <table>
-    <tr>
-      <td class="section-title" colspan="2">INSTALACIONES ELÉCTRICAS</td>
-    </tr>
-    <tr>
-      <td><strong>Electroducto:</strong> {{ orden.electroducto }}</td>
-      <td><strong>Espacio Electroducto:</strong> {{ orden.espacio_electroducto }}</td>
-    </tr>
-    <tr>
-      <td><strong>Número de Tablero:</strong> {{ orden.num_tablero }}</td>
-      <td><strong>Espacio del Tablero:</strong> {{ orden.espacio_tablero }}</td>
-    </tr>
-    <tr>
-      <td><strong>Cable Utilizado:</strong> {{ orden.cable }}</td>
-      <td><strong>Canalización Utilizada:</strong> {{ orden.canalizacion }}</td>
-    </tr>
-    <tr>
-      <td colspan="2"><strong>Observaciones Eléctricas:</strong> {{ orden.obs_electrica }}</td>
-    </tr>
-  </table>
-
-</body>
-</html>
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
