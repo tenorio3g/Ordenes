@@ -2,27 +2,76 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Formulario de Orden</title>
+  <title>Orden de Trabajo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; }
+    fieldset { margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc; padding: 15px; }
+    legend { font-weight: bold; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 6px; margin-top: 4px; box-sizing: border-box; }
+    .botones { text-align: center; margin-top: 20px; }
+  </style>
 </head>
 <body>
-  <h1>Captura de Orden</h1>
-  <form action="/guardar" method="POST">
-    <label for="dato">Dato:</label>
-    <input type="text" id="dato" name="dato" required><br><br>
-
-    <button type="submit">Guardar</button>
-  </form>
+  <h1>Formulario de Orden de Trabajo</h1>
 
   <form action="/exportar_pdf" method="POST">
-    <input type="hidden" id="dato_hidden" name="dato">
-    <button type="submit" onclick="copiarDato()">Exportar PDF</button>
-  </form>
 
-  <script>
-    function copiarDato() {
-      var dato = document.getElementById('dato').value;
-      document.getElementById('dato_hidden').value = dato;
-    }
-  </script>
+    <fieldset>
+      <legend>Datos Generales</legend>
+      <label>Área de trabajo: <input type="text" name="area" required></label>
+      <label>Trabajo requerido: <input type="text" name="trabajo" required></label>
+      <label>Celda o equipo: <input type="text" name="celda"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Solicitante</legend>
+      <label>Requisitor: <input type="text" name="requisitor"></label>
+      <label>Planta: <input type="text" name="planta"></label>
+      <label>Supervisor: <input type="text" name="supervisor"></label>
+      <label>Fecha de requisición: <input type="date" name="fecha_requisicion"></label>
+      <label># de orden: <input type="text" name="orden"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Check List de Seguridad</legend>
+      <label><input type="checkbox" name="check[]" value="Delimitar el área de trabajo"> Delimitar el área de trabajo</label>
+      <label><input type="checkbox" name="check[]" value="Cubrir máquinas"> Cubrir con plástico máquinas o equipos</label>
+      <label><input type="checkbox" name="check[]" value="Permisos"> Confirmar permisos antes de iniciar</label>
+      <label><input type="checkbox" name="check[]" value="EPP"> Usar EPP</label>
+      <label><input type="checkbox" name="check[]" value="Energía"> Verificación de ausencia de energía</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Materiales y Actividades</legend>
+      <label>Material utilizado: <textarea name="material" rows="3"></textarea></label>
+      <label>Observaciones: <textarea name="observaciones" rows="3"></textarea></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Fechas y Responsable</legend>
+      <label>Fecha de inicio: <input type="date" name="fecha_inicio"></label>
+      <label>Hora de inicio: <input type="time" name="hora_inicio"></label>
+      <label>Fecha de terminación: <input type="date" name="fecha_fin"></label>
+      <label>Hora de terminación: <input type="time" name="hora_fin"></label>
+      <label>Realizado por: <input type="text" name="realizado_por"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Instalaciones Eléctricas</legend>
+      <label>Electroducto: <input type="text" name="electroducto"></label>
+      <label>Espacio del Electroducto: <input type="text" name="espacio_electroducto"></label>
+      <label>Número de Tablero: <input type="text" name="num_tablero"></label>
+      <label>Espacio del Tablero: <input type="text" name="espacio_tablero"></label>
+      <label>Cable utilizado: <input type="text" name="cable"></label>
+      <label>Canalización utilizada: <input type="text" name="canalizacion"></label>
+      <label>Observaciones eléctricas: <textarea name="obs_electrica" rows="3"></textarea></label>
+    </fieldset>
+
+    <div class="botones">
+      <button type="submit">Exportar PDF</button>
+    </div>
+  </form>
 </body>
 </html>
