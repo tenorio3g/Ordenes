@@ -71,7 +71,6 @@ def exportar_pdf():
     pdf = pdfkit.from_string(rendered, False, options=options)
 
     
-    pdf = pdfkit.from_string(rendered, False)
 
     # Preparar respuesta para descarga
     response = make_response(pdf)
