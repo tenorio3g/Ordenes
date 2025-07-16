@@ -56,6 +56,16 @@ def exportar_pdf():
     rendered = render_template('pdf_template.html', orden=orden, checklist=CHECKLIST_ITEMS)
 
     # Generar PDF con pdfkit
+
+    options = {
+    'page-size': 'Letter',
+    'orientation': 'Landscape',
+    'encoding': "UTF-8"
+    }
+
+    pdf = pdfkit.from_string(rendered, False, options=options)
+
+    
     pdf = pdfkit.from_string(rendered, False)
 
     # Preparar respuesta para descarga
