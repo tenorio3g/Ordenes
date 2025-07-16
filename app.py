@@ -1,6 +1,6 @@
-
 from flask import Flask, render_template, request, make_response
 import pdfkit
+from PyPDF2 import PdfReader, PdfWriter
 import os
 
 app = Flask(__name__)
@@ -56,7 +56,6 @@ def exportar_pdf():
     options = {
         'page-width': '11in',
         'page-height': '8.5in',
-        'orientation': 'Landscape',
         'margin-top': '0.5in',
         'margin-right': '0.5in',
         'margin-bottom': '0.5in',
@@ -65,11 +64,34 @@ def exportar_pdf():
         'no-outline': None
     }
 
-    pdf = pdfkit.from_string(rendered, False, options=options)
+    # 1️⃣ Genera PDF temporal vertical
+    temp_pdf = "temp_orden.pdf"
+    pdfkit.from_string(rendered, temp_pdf, options=options)
 
-    response = make_response(pdf)
+    # 2️⃣ Rota el PDF con PyPDF2
+    rotated_pdf = "orden_trabajo_rotated.pdf"
+    reader = PdfReader(temp_pdf)
+    writer = PdfWriter()
+
+    for page in reader.pages:
+        page.rotate(90)
+        writer.add_page(page)
+
+    with open(rotated_pdf, "wb") as f_out:
+        writer.write(f_out)
+
+    # 3️⃣ Devuelve PDF girado
+    with open(rotated_pdf, "rb") as f:
+        pdf_data = f.read()
+
+    response = make_response(pdf_data)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=orden_trabajo.pdf'
+
+    # Limpieza opcional
+    os.remove(temp_pdf)
+    os.remove(rotated_pdf)
+
     return response
 
 if __name__ == '__main__':
