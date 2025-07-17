@@ -51,7 +51,7 @@ def exportar_pdf():
         'check': request.form.getlist('check[]')
     }
 
-    rendered = render_template('pdf_template.html', data=orden, checklist=CHECKLIST_ITEMS)
+    rendered = render_template('pdf_template.html', orden=orden, checklist=CHECKLIST_ITEMS)
 
     options = {
         'page-width': '11in',
