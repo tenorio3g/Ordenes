@@ -9,150 +9,131 @@
             font-size: 11px;
             margin: 20px;
         }
-
-        h2 {
+        h2, h3 {
             text-align: center;
+            margin: 0;
+        }
+        .section {
             margin-bottom: 10px;
         }
-
-        .section-title {
-            background-color: #f0f0f0;
-            font-weight: bold;
-            padding: 4px;
-            margin-top: 15px;
+        .field-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
         }
-
+        .field {
+            width: 48%;
+        }
+        label {
+            font-weight: bold;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-top: 8px;
         }
-
         th, td {
             border: 1px solid #000;
             padding: 4px;
-            vertical-align: top;
+            text-align: left;
         }
-
-        .signature {
-            height: 60px;
+        .checkbox-cell {
+            text-align: center;
         }
-
-        .firmas {
+        .signature-section {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 40px;
         }
-
-        .firma-box {
+        .signature {
             width: 45%;
             text-align: center;
-        }
-
-        .checklist td {
-            text-align: center;
-        }
-
-        .instalaciones th, .instalaciones td {
-            font-size: 10px;
+            border-top: 1px solid #000;
+            padding-top: 4px;
         }
     </style>
 </head>
 <body>
 
-    <h2>ORDEN DE TRABAJO - MANTENIMIENTO</h2>
+    <h2>ORDEN DE TRABAJO</h2>
+    <h3>DEPARTAMENTO DE MANTENIMIENTO</h3>
 
-    <div class="section-title">Información General</div>
-    <table>
-        <tr>
-            <td><strong>Fecha:</strong> {{ fecha }}</td>
-            <td><strong>Hora de Inicio:</strong> {{ hora_inicio }}</td>
-            <td><strong>Hora de Fin:</strong> {{ hora_fin }}</td>
-        </tr>
-        <tr>
-            <td colspan="2"><strong>Área:</strong> {{ area }}</td>
-            <td><strong>Persona que Solicita:</strong> {{ solicitante }}</td>
-        </tr>
-        <tr>
-            <td colspan="3"><strong>Descripción del Trabajo:</strong> {{ descripcion }}</td>
-        </tr>
-    </table>
+    <div class="section">
+        <div class="field-row">
+            <div class="field"><label>Folio:</label> {{ data.folio }}</div>
+            <div class="field"><label>Fecha:</label> {{ data.fecha }}</div>
+        </div>
+        <div class="field-row">
+            <div class="field"><label>Solicita:</label> {{ data.solicita }}</div>
+            <div class="field"><label>Área:</label> {{ data.area }}</div>
+        </div>
+        <div class="field-row">
+            <div class="field"><label>Actividad:</label> {{ data.actividad }}</div>
+            <div class="field"><label>Prioridad:</label> {{ data.prioridad }}</div>
+        </div>
+        <div class="field-row">
+            <div class="field"><label>Hora Inicio:</label> {{ data.hora_inicio }}</div>
+            <div class="field"><label>Hora Fin:</label> {{ data.hora_fin }}</div>
+        </div>
+    </div>
 
-    <div class="section-title">Trabajos Realizados</div>
-    <table>
-        <tr>
-            <td>{{ trabajos_realizados }}</td>
-        </tr>
-    </table>
+    <div class="section">
+        <label>Descripción del trabajo:</label>
+        <div>{{ data.descripcion }}</div>
+    </div>
 
-    <div class="section-title">Checklist de Seguridad</div>
-    <table class="checklist">
-        <thead>
+    <div class="section">
+        <label>Check list de verificación:</label>
+        <table>
             <tr>
-                <th>Condición</th>
-                <th>SI</th>
-                <th>NO</th>
+                <th>Verificación</th>
+                <th>OK</th>
+                <th>No Aplica</th>
             </tr>
-        </thead>
-        <tbody>
+            {% for item in data.checklist %}
             <tr>
-                <td>¿Se usó EPP adecuado?</td>
-                <td>{{ epp_si }}</td>
-                <td>{{ epp_no }}</td>
-            </tr>
-            <tr>
-                <td>¿Se aisló energía?</td>
-                <td>{{ energia_si }}</td>
-                <td>{{ energia_no }}</td>
-            </tr>
-            <tr>
-                <td>¿Se colocó señalización?</td>
-                <td>{{ senalizacion_si }}</td>
-                <td>{{ senalizacion_no }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="section-title">Materiales Utilizados</div>
-    <table>
-        <tr>
-            <td>{{ materiales }}</td>
-        </tr>
-    </table>
-
-    <div class="section-title">Instalaciones Eléctricas</div>
-    <table class="instalaciones">
-        <thead>
-            <tr>
-                <th>Equipo</th>
-                <th>Ubicación</th>
-                <th>Tensión</th>
-                <th>Corriente</th>
-                <th>Observaciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for equipo in instalaciones %}
-            <tr>
-                <td>{{ equipo.nombre }}</td>
-                <td>{{ equipo.ubicacion }}</td>
-                <td>{{ equipo.tension }}</td>
-                <td>{{ equipo.corriente }}</td>
-                <td>{{ equipo.observaciones }}</td>
+                <td>{{ item.nombre }}</td>
+                <td class="checkbox-cell">{% if item.estado == 'ok' %}✔{% endif %}</td>
+                <td class="checkbox-cell">{% if item.estado == 'na' %}✔{% endif %}</td>
             </tr>
             {% endfor %}
-        </tbody>
-    </table>
+        </table>
+    </div>
 
-    <div class="firmas">
-        <div class="firma-box">
-            <strong>Firma EHS:</strong><br><br>
-            ___________________________
-        </div>
-        <div class="firma-box">
-            <strong>Firma Aprobación:</strong><br><br>
-            ___________________________
-        </div>
+    <div class="section">
+        <label>Materiales utilizados:</label>
+        <ul>
+            {% for material in data.materiales %}
+                <li>{{ material }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section">
+        <label>Instalaciones eléctricas (tipo CTC):</label>
+        <table>
+            <tr>
+                <th>Ubicación</th>
+                <th>Actividad</th>
+                <th>Responsable</th>
+                <th>Mediciones</th>
+                <th>Observaciones</th>
+            </tr>
+            {% for fila in data.ctc %}
+            <tr>
+                <td>{{ fila.ubicacion }}</td>
+                <td>{{ fila.actividad }}</td>
+                <td>{{ fila.responsable }}</td>
+                <td>{{ fila.mediciones }}</td>
+                <td>{{ fila.observaciones }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="signature-section">
+        <div class="signature">Firma EHS</div>
+        <div class="signature">Firma Aprobación</div>
     </div>
 
 </body>
