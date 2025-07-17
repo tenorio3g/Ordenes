@@ -1,140 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Orden de Trabajo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            margin: 20px;
-        }
-        h2, h3 {
-            text-align: center;
-            margin: 0;
-        }
-        .section {
-            margin-bottom: 10px;
-        }
-        .field-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        .field {
-            width: 48%;
-        }
-        label {
-            font-weight: bold;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 8px;
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 4px;
-            text-align: left;
-        }
-        .checkbox-cell {
-            text-align: center;
-        }
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-        }
-        .signature {
-            width: 45%;
-            text-align: center;
-            border-top: 1px solid #000;
-            padding-top: 4px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Orden de Trabajo de Mantenimiento</title>
+  <style>
+      @page {
+    size: 11in 8.5in;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin: 20px;
+  }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      margin: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      border: 1px solid #000;
+      padding: 4px;
+      vertical-align: top;
+    }
+
+    .no-border {
+      border: none;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .checkbox {
+      font-family: DejaVu Sans, sans-serif;
+    }
+
+    .section-title {
+      font-weight: bold;
+      background: #eee;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
 
-    <h2>ORDEN DE TRABAJO</h2>
-    <h3>DEPARTAMENTO DE MANTENIMIENTO</h3>
+  <h3 class="center">ALCOM ELECTRONICOS DE MEXICO S.A. DE C.V.<br>ORDEN DE TRABAJO DE MANTENIMIENTO</h3>
 
-    <div class="section">
-        <div class="field-row">
-            <div class="field"><label>Folio:</label> {{ data.folio }}</div>
-            <div class="field"><label>Fecha:</label> {{ data.fecha }}</div>
-        </div>
-        <div class="field-row">
-            <div class="field"><label>Solicita:</label> {{ data.solicita }}</div>
-            <div class="field"><label>Área:</label> {{ data.area }}</div>
-        </div>
-        <div class="field-row">
-            <div class="field"><label>Actividad:</label> {{ data.actividad }}</div>
-            <div class="field"><label>Prioridad:</label> {{ data.prioridad }}</div>
-        </div>
-        <div class="field-row">
-            <div class="field"><label>Hora Inicio:</label> {{ data.hora_inicio }}</div>
-            <div class="field"><label>Hora Fin:</label> {{ data.hora_fin }}</div>
-        </div>
-    </div>
+  <table>
+    <tr>
+      <td><strong>ÁREA DE TRABAJO:</strong> {{ orden.area }}</td>
+      <td><strong>TRABAJO REQUERIDO:</strong> {{ orden.trabajo }}</td>
+    </tr>
+    <tr>
+      <td><strong>CELDA O EQUIPO:</strong> {{ orden.celda }}</td>
+      <td>
+        <strong>REQUISITOR:</strong> {{ orden.requisitor }}<br>
+        <strong>PLANTA:</strong> {{ orden.planta }}<br>
+        <strong>SUPERVISOR:</strong> {{ orden.supervisor }}<br>
+        <strong>Fecha de requisición:</strong> {{ orden.fecha_requisicion }}<br>
+        <strong># de Orden:</strong> {{ orden.orden }}
+      </td>
+    </tr>
+  </table>
 
-    <div class="section">
-        <label>Descripción del trabajo:</label>
-        <div>{{ data.descripcion }}</div>
-    </div>
+  <br>
 
-    <div class="section">
-        <label>Check list de verificación:</label>
-        <table>
-            <tr>
-                <th>Verificación</th>
-                <th>OK</th>
-                <th>No Aplica</th>
-            </tr>
-            {% for item in data.checklist %}
-            <tr>
-                <td>{{ item.nombre }}</td>
-                <td class="checkbox-cell">{% if item.estado == 'ok' %}✔{% endif %}</td>
-                <td class="checkbox-cell">{% if item.estado == 'na' %}✔{% endif %}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
+  <table>
+    <tr>
+      <td class="section-title" colspan="2">NOTAS:</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Antes de entregar la orden de trabajo a mantenimiento deberán primero acudir al departamento de Seguridad y Medio Ambiente para su autorización.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>DEPTO DE EHS:</strong> SI ( ) NO ( )</td>
+      <td><strong>FIRMA DE EHS:</strong> ________________________</td>
+    </tr>
+  </table>
 
-    <div class="section">
-        <label>Materiales utilizados:</label>
-        <ul>
-            {% for material in data.materiales %}
-                <li>{{ material }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+  <br>
 
-    <div class="section">
-        <label>Instalaciones eléctricas (tipo CTC):</label>
-        <table>
-            <tr>
-                <th>Ubicación</th>
-                <th>Actividad</th>
-                <th>Responsable</th>
-                <th>Mediciones</th>
-                <th>Observaciones</th>
-            </tr>
-            {% for fila in data.ctc %}
-            <tr>
-                <td>{{ fila.ubicacion }}</td>
-                <td>{{ fila.actividad }}</td>
-                <td>{{ fila.responsable }}</td>
-                <td>{{ fila.mediciones }}</td>
-                <td>{{ fila.observaciones }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
+  <table>
+    <tr>
+      <td class="section-title" colspan="3">OBLIGACIONES ANTES DE REALIZAR EL TRABAJO</td>
+    </tr>
+    {% for item in checklist %}
+    <tr>
+      <td style="width: 5%;">{% if item in orden.check %}✓{% else %} {% endif %}</td>
+      <td style="width: 95%;" colspan="2">{{ item }}</td>
+    </tr>
+    {% endfor %}
+  </table>
 
-    <div class="signature-section">
-        <div class="signature">Firma EHS</div>
-        <div class="signature">Firma Aprobación</div>
-    </div>
+  <br>
+
+  <table>
+    <tr>
+      <td><strong>FECHA DE INICIO:</strong> {{ orden.fecha_inicio }}</td>
+      <td><strong>HORA DE INICIO:</strong> {{ orden.hora_inicio }}</td>
+      <td><strong>FECHA DE TERMINACIÓN:</strong> {{ orden.fecha_fin }}</td>
+      <td><strong>HORA DE TERMINACIÓN:</strong> {{ orden.hora_fin }}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>REALIZADO POR:</strong> {{ orden.realizado_por }}</td>
+      <td colspan="2"><strong>APROBADO POR:</strong> ________________________</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title">MATERIAL UTILIZADO:</td>
+    </tr>
+    <tr>
+      <td>{{ orden.material }}</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title">OBSERVACIONES DE TRABAJO REALIZADO</td>
+    </tr>
+    <tr>
+      <td>{{ orden.observaciones }}</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr>
+      <td class="section-title" colspan="2">INSTALACIONES ELÉCTRICAS</td>
+    </tr>
+    <tr>
+      <td><strong>Electroducto:</strong> {{ orden.electroducto }}</td>
+      <td><strong>Espacio Electroducto:</strong> {{ orden.espacio_electroducto }}</td>
+    </tr>
+    <tr>
+      <td><strong>Número de Tablero:</strong> {{ orden.num_tablero }}</td>
+      <td><strong>Espacio del Tablero:</strong> {{ orden.espacio_tablero }}</td>
+    </tr>
+    <tr>
+      <td><strong>Cable Utilizado:</strong> {{ orden.cable }}</td>
+      <td><strong>Canalización Utilizada:</strong> {{ orden.canalizacion }}</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Observaciones Eléctricas:</strong> {{ orden.obs_electrica }}</td>
+    </tr>
+  </table>
 
 </body>
 </html>
