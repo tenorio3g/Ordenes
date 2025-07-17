@@ -1,139 +1,121 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Orden de Trabajo</title>
+    <title>Formato de Orden</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-size: 12px;
             margin: 20px;
         }
-        h2, h3 {
+        h1, h2 {
             text-align: center;
-            margin: 0;
-        }
-        .section {
-            margin-bottom: 10px;
-        }
-        .field-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        .field {
-            width: 48%;
-        }
-        label {
-            font-weight: bold;
         }
         table {
-            width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
+            width: 100%;
+            margin-top: 10px;
         }
         th, td {
-            border: 1px solid #000;
-            padding: 4px;
+            border: 1px solid #333;
+            padding: 5px;
             text-align: left;
+            vertical-align: top;
         }
-        .checkbox-cell {
-            text-align: center;
+        .field-group {
+            margin-top: 10px;
         }
-        .signature-section {
+        .field {
+            margin-bottom: 5px;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .signatures {
             display: flex;
             justify-content: space-between;
-            margin-top: 40px;
+            margin-top: 30px;
         }
-        .signature {
+        .signature-block {
             width: 45%;
             text-align: center;
-            border-top: 1px solid #000;
-            padding-top: 4px;
+        }
+        .signature-line {
+            border-top: 1px solid black;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
-    <h2>ORDEN DE TRABAJO</h2>
-    <h3>DEPARTAMENTO DE MANTENIMIENTO</h3>
+    <h1>FORMATO DE ORDEN DE TRABAJO</h1>
 
-    <div class="section">
-        <div class="field-row">
-            <div class="field"><label>Folio:</label> {{ data.folio }}</div>
-            <div class="field"><label>Fecha:</label> {{ data.fecha }}</div>
+    <div class="field-group">
+        <div class="field"><span class="label">Folio:</span> {{ orden.folio }}</div>
+        <div class="field"><span class="label">Fecha:</span> {{ orden.fecha }}</div>
+        <div class="field"><span class="label">Solicitante:</span> {{ orden.solicitante }}</div>
+        <div class="field"><span class="label">Área:</span> {{ orden.area }}</div>
+        <div class="field"><span class="label">Ubicación:</span> {{ orden.ubicacion }}</div>
+        <div class="field"><span class="label">Equipo:</span> {{ orden.equipo }}</div>
+    </div>
+
+    <h2>Descripción del trabajo</h2>
+    <p>{{ orden.descripcion }}</p>
+
+    <h2>Checklist de seguridad</h2>
+    <table>
+        <tr>
+            <th>Elemento</th>
+            <th>Estado</th>
+        </tr>
+        {% for item in orden.checklist %}
+        <tr>
+            <td>{{ item.nombre }}</td>
+            <td>{{ '✔️' if item.estado else '❌' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Materiales y herramientas utilizadas</h2>
+    <ul>
+        {% for material in orden.materiales %}
+        <li>{{ material }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Observaciones</h2>
+    <p>{{ orden.observaciones }}</p>
+
+    <h2>Instalaciones eléctricas (Tipo CTC)</h2>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Ubicación</th>
+            <th>Tipo</th>
+            <th>Capacidad</th>
+            <th>Comentarios</th>
+        </tr>
+        {% for instalacion in orden.instalaciones %}
+        <tr>
+            <td>{{ instalacion.nombre }}</td>
+            <td>{{ instalacion.ubicacion }}</td>
+            <td>{{ instalacion.tipo }}</td>
+            <td>{{ instalacion.capacidad }}</td>
+            <td>{{ instalacion.comentarios }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-line"></div>
+            <div>Firma EHS</div>
         </div>
-        <div class="field-row">
-            <div class="field"><label>Solicita:</label> {{ data.solicita }}</div>
-            <div class="field"><label>Área:</label> {{ data.area }}</div>
+        <div class="signature-block">
+            <div class="signature-line"></div>
+            <div>Firma Aprobación</div>
         </div>
-        <div class="field-row">
-            <div class="field"><label>Actividad:</label> {{ data.actividad }}</div>
-            <div class="field"><label>Prioridad:</label> {{ data.prioridad }}</div>
-        </div>
-        <div class="field-row">
-            <div class="field"><label>Hora Inicio:</label> {{ data.hora_inicio }}</div>
-            <div class="field"><label>Hora Fin:</label> {{ data.hora_fin }}</div>
-        </div>
-    </div>
-
-    <div class="section">
-        <label>Descripción del trabajo:</label>
-        <div>{{ data.descripcion }}</div>
-    </div>
-
-    <div class="section">
-        <label>Check list de verificación:</label>
-        <table>
-            <tr>
-                <th>Verificación</th>
-                <th>OK</th>
-                <th>No Aplica</th>
-            </tr>
-            {% for item in data.checklist %}
-            <tr>
-                <td>{{ item.nombre }}</td>
-                <td class="checkbox-cell">{% if item.estado == 'ok' %}✔{% endif %}</td>
-                <td class="checkbox-cell">{% if item.estado == 'na' %}✔{% endif %}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-    <div class="section">
-        <label>Materiales utilizados:</label>
-        <ul>
-            {% for material in data.materiales %}
-                <li>{{ material }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="section">
-        <label>Instalaciones eléctricas (tipo CTC):</label>
-        <table>
-            <tr>
-                <th>Ubicación</th>
-                <th>Actividad</th>
-                <th>Responsable</th>
-                <th>Mediciones</th>
-                <th>Observaciones</th>
-            </tr>
-            {% for fila in data.ctc %}
-            <tr>
-                <td>{{ fila.ubicacion }}</td>
-                <td>{{ fila.actividad }}</td>
-                <td>{{ fila.responsable }}</td>
-                <td>{{ fila.mediciones }}</td>
-                <td>{{ fila.observaciones }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-    <div class="signature-section">
-        <div class="signature">Firma EHS</div>
-        <div class="signature">Firma Aprobación</div>
     </div>
 
 </body>
